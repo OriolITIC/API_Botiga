@@ -10,7 +10,7 @@ def db_client():
             port = config["port"],
             user = config["user"],
             password = config["password"],
-            database = config["database"]
+            database = config["dbname"]
         )
     except Exception as e:
         return {"status": -1, "message": f"Error de connexio: {e}"}
