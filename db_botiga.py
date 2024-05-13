@@ -19,10 +19,3 @@ def read():
 
 
 
-def producte_schema(peli) -> dict:
-    return {"Id": peli[0],
-            "titol": peli[1],
-            "any": peli[2],
-            "puntuacio": peli[3],
-            "vots": peli[4]
-            }
