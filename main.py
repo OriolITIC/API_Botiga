@@ -24,7 +24,7 @@ def read_producte_by_id(id: int):
         return producte
     else:
         return {"message": "Movie not found"}
-
+"""
 @app.post("/product")
 async def create_producte(data: producte):
     product_id = data.product_id
@@ -42,11 +42,11 @@ async def create_producte(data: producte):
     return {
         "msg": "S'ha afegit correctament"
     }
-
+"""
 @app.put("/product/producte/{id}")
-def update_producte(id:str,vots:int):
-    producte_pers.update_producte(id,vots)
+def update_producte(id:int,name:str):
+    producte_pers.update_name(id,name)
 
 @app.delete("/product/{id}")
 def delete_film(id:int):
-    pelis_db.delete_producte(id)
+    producte_pers.delete_by_Id(id)
