@@ -1,5 +1,4 @@
 import mysql.connector
-import client
 from configuracio import config
 
 def db_client():
