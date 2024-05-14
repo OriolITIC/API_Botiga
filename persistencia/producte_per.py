@@ -2,11 +2,16 @@ from models.producte import Product
 from client import db_client
 from typing import List
 
-def create(name, company, price, subcategory_id, description=None, units=None, created_at=None, updated_at=None):
+# Función para crear un nuevo producto
+def create(name, company, price, subcategory_id, description=None, units=None, created_at=None
+           , updated_at=None):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = f"INSERT INTO product (name, company, price, subcategory_id, description, units) VALUES (%s, %s, %s, %s, %s, %s);"
+        
+        query = f"INSERT INTO product 
+                  (name, company, price, subcategory_id, description, units) 
+                  VALUES (%s, %s, %s, %s, %s, %s);"
         values = (name, company, price, subcategory_id, description, units)
         cur.execute(query, values)
         conn.commit()
