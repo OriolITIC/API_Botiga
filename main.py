@@ -48,8 +48,8 @@ async def load_products(file: UploadFile = File(...)):
         csv_data = io.StringIO(contents.decode("utf-8"))
         reader = csv.DictReader(csv_data)
 
-        # category_id_set = set()
-        # subcategory_id_set = set()
+        category_id_set = set()
+        subcategory_id_set = set()
 
         for row in reader:
             category_id = int(row["id_categoria"])
@@ -64,34 +64,19 @@ async def load_products(file: UploadFile = File(...)):
             product_units = float(row["unidades"])
 
             # miramos si ya existe category_id 
-            print(f"looking for category_id: {category_id}")
-            if (category_pers.read_by_id(category_id) is not None):
-                print(f"category_id was already in db updating: {category_id}, {category_name}")
-                category_pers.update_name(category_id, category_name)
-            else:
-                print(f"category_id was not in db inserting: {category_id}, {category_name}")
-                category_pers.create_with_id(category_id, category_name)
+            if (category_id not in category_id_set):
+                if (category_pers.read_by_id(category_id) is not None):
+                    category_pers.update_name(category_id, category_name)
+                else:
+                    category_pers.create_with_id(category_id, category_name)
+                category_id_set.add(category_id)
 
-            # if (category_id not in category_id_set):
-            #     if (category_pers.read_by_id(category_id) is not None):
-            #         category_pers.update_name(category_id, category_name)
-            #     else:
-            #         category_pers.create_with_id(category_id, category_name)
-            #     category_id_set.add(category_id)
-
-            # miramos si ya existe subcategory_id 
-            if (subcategory_pers.read_by_id(subcategory_id) is not None):
-                subcategory_pers.update_name(subcategory_id, subcategory_name)
-            else:
-                subcategory_pers.create_with_id(subcategory_id, subcategory_name, category_id)
-
-
-            # if (subcategory_id not in subcategory_id_set):
-            #     if (subcategory_pers.read_by_id(subcategory_id) is not None):
-            #         subcategory_pers.update_name(subcategory_id, subcategory_name)
-            #     else:
-            #         subcategory_pers.create_with_id(subcategory_id, subcategory_name, category_id)
-            #     category_id_set.add(category_id)
+            if (subcategory_id not in subcategory_id_set):
+                if (subcategory_pers.read_by_id(subcategory_id) is not None):
+                    subcategory_pers.update_name(subcategory_id, subcategory_name)
+                else:
+                    subcategory_pers.create_with_id(subcategory_id, subcategory_name, category_id)
+                category_id_set.add(category_id)
 
             if (producte_pers.read_by_id(product_id) is not None):
                 producte_pers.update_name(product_id, product_name)
