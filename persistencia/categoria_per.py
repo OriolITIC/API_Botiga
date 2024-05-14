@@ -6,7 +6,7 @@ def create(name):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = f"INSERT INTO category (name) VALUES ({name});"
+        query = f"INSERT INTO category (name) VALUES ('{name}');"
         cur.execute(query)
         conn.commit()
         category_id = cur.lastrowid
@@ -23,7 +23,7 @@ def create_with_id(id, name):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = f"INSERT INTO category (category_id, name) VALUES ({id}, {name});"
+        query = f"INSERT INTO category (category_id, name) VALUES ({id}, '{name}');"
         cur.execute(query)
         conn.commit()
         category_id = cur.lastrowid
@@ -57,7 +57,7 @@ def read_by_id(id):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = f"SELECT * FROM category WHERE id = {id};"
+        query = f"SELECT * FROM category WHERE category_id = {id};"
         cur.execute(query)
         
         result = cur.fetchone()
@@ -74,7 +74,7 @@ def update_name(id, name):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = f"UPDATE category SET name = {name}, updated_at = NOW() WHERE category_id = {id};"
+        query = f"UPDATE category SET name = '{name}', updated_at = NOW() WHERE category_id = {id};"
         cur.execute(query)
         conn.commit()
     except Exception as e:
