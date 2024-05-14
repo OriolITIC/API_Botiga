@@ -20,6 +20,24 @@ def create(name, company, price, subcategory_id, description=None, units=None, c
 
     return {"message": f"S'ha afegit correctament"}
 
+def create_with_id(product_id, name, company, price, subcategory_id, description=None, units=None, created_at=None, updated_at=None):
+    try:
+        conn = db_client()
+        cur = conn.cursor()
+        query = f"INSERT INTO product (product_id, name, company, price, subcategory_id, description, units) VALUES (%s, %s, %s, %s, %s, %s, %s);"
+        values = (product_id, name, company, price, subcategory_id, description, units)
+        cur.execute(query, values)
+        conn.commit()
+        product_id = cur.lastrowid
+    
+    except Exception as e:
+        return {"status": -1, "message": f"Error de connexió:{e}"}
+    
+    finally:
+        conn.close()
+
+    return {"message": f"S'ha afegit correctament"}
+
 def read():
     try:
         conn = db_client()
@@ -58,7 +76,7 @@ def update_name(id, name):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = "UPDATE product SET name = %s WHERE product_id = %s;"
+        query = "UPDATE product SET name = %s, updated_at = NOW() WHERE product_id = %s;"
         values = (name, id)
         cur.execute(query, values)
         conn.commit()
