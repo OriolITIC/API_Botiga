@@ -1,11 +1,14 @@
 from models.producte import Product
 from client import db_client
-from typing import List
+from typing import List, Optional
 
-def create(name, company, price, subcategory_id, description=None, units=None, created_at=None, updated_at=None):
+# Función para crear un nuevo producto
+def create(name, company, price, subcategory_id, description=None, units=None, created_at=None
+           , updated_at=None):
     try:
         conn = db_client()
         cur = conn.cursor()
+        
         query = f"INSERT INTO product (name, company, price, subcategory_id, description, units) VALUES (%s, %s, %s, %s, %s, %s);"
         values = (name, company, price, subcategory_id, description, units)
         cur.execute(query, values)
@@ -104,27 +107,41 @@ def delete_by_Id(id):
 
     return {"message": f"S'ha borrat correctament"}
 
-def readAll():
+def readAll(orderby: str = "asc", contain: Optional[str] = None, skip: int = 0, limit: int = 100):
     try:
         conn = db_client()
         cur = conn.cursor()
+
+        if orderby.lower() not in ["asc", "desc"]:
+            orderby = "asc"
+
         query = """
             SELECT c.name AS category_name, s.name AS subcategory_name, p.name AS product_name, p.company AS product_brand, p.price
             FROM product p
             JOIN subcategory s ON p.subcategory_id = s.subcategory_id
-            JOIN category c ON s.category_id = c.category_id;
+            JOIN category c ON s.category_id = c.category_id
         """
-        cur.execute(query)
-        
+        if contain:
+            query += " WHERE p.name LIKE %s"
+            contain = f"%{contain}%"
+
+        query += f" ORDER BY p.name {orderby} LIMIT %s OFFSET %s;"
+
+        if contain:
+            cur.execute(query, (contain, limit, skip))
+        else:
+            cur.execute(query, (limit, skip))
+
         result = cur.fetchall()
 
     except Exception as e:
-        return {"status": -1, "message": f"Error de connexió:{e}"}
+        return {"status": -1, "message": f"Error de connexió: {e}"}
     
     finally:
         conn.close()
 
     return result
+
 
 def product_schema(product: Product) -> dict:
     return {
