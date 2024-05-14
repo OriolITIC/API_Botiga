@@ -19,6 +19,23 @@ def create(name):
 
     return category_id
 
+def create_with_id(id, name):
+    try:
+        conn = db_client()
+        cur = conn.cursor()
+        query = f"INSERT INTO category (category_id, name) VALUES ({id}, {name});"
+        cur.execute(query)
+        conn.commit()
+        category_id = cur.lastrowid
+    
+    except Exception as e:
+        return {"status": -1, "message": f"Error de connexió:{e}"}
+
+    finally:
+        conn.close()
+
+    return category_id
+
 def read():
     try:
         conn = db_client()
@@ -36,11 +53,28 @@ def read():
 
     return result
 
+def read_by_id(id):
+    try:
+        conn = db_client()
+        cur = conn.cursor()
+        query = f"SELECT * FROM category WHERE id = {id};"
+        cur.execute(query)
+        
+        result = cur.fetchone()
+
+    except Exception as e:
+        return {"status": -1, "message": f"Error de connexió:{e}"}
+    
+    finally:
+        conn.close()
+
+    return result
+
 def update_name(id, name):
     try:
         conn = db_client()
         cur = conn.cursor()
-        query = f"UPDATE category SET name = {name} WHERE category_id = {id};"
+        query = f"UPDATE category SET name = {name}, updated_at = NOW() WHERE category_id = {id};"
         cur.execute(query)
         conn.commit()
     except Exception as e:
