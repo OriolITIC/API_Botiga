@@ -1,5 +1,5 @@
-from typing import Union, List
-from fastapi import FastAPI, File, UploadFile
+from typing import Optional, Union, List
+from fastapi import FastAPI, File, Query, UploadFile
 import csv
 import io
 import persistencia.categoria_per as category_pers
@@ -44,8 +44,14 @@ def delete(id:int):
 
 # Ruta para obtener todos los productos en un formato alternativo
 @app.get("/productAll")
-def read_all_productes():
-    return producte_pers.readAll_list_schema(producte_pers.readAll())
+def read_all_productes(
+    orderby: Optional[str] = Query("asc", regex="^(asc|desc)$"),
+    contain: Optional[str] = Query(None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=100)):
+    
+    products = producte_pers.readAll(orderby, contain, skip, limit)
+    return producte_pers.readAll_list_schema(products)
 
 # Ruta para cargar productos desde un archivo CSV
 @app.post("/loadProducts")
