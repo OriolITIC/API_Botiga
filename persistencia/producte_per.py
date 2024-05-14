@@ -91,7 +91,11 @@ def readAll():
         conn = db_client()
         cur = conn.cursor()
         query = """
-            SELECT c.name AS category_name, s.name AS subcategory_name, p.name AS product_name, p.company AS product_brand, p.price
+            SELECT c.name 
+                AS category_name, s.name 
+                AS subcategory_name, p.name 
+                AS product_name, p.company 
+                AS product_brand, p.price
             FROM product p
             JOIN subcategory s ON p.subcategory_id = s.subcategory_id
             JOIN category c ON s.category_id = c.category_id;
