@@ -1,5 +1,18 @@
 # API_Botiga
 
+La práctica consiste en generar un api REST con fastAPI apartir de una base de datos mariaDB. Esta base de datos tiene 3 tablas(category, subcategory, product). Esta aplicación nos permite hacer CRUD simples contra esta base de datos.
+
+## Index 
+
+1 [Get /product/](#get-product) </br>
+2 [Post /product/](#post-product) </br>
+3 [Get /product/{id}](#get-productid) </br>
+4 [Put /product/{id}](#put-productid) </br>
+5 [Delete /product/{id}](#delete-productid) </br>
+6 [Get /productAll/](#get-productall) </br>
+7 [Post /loadProducts](#post-loadproducts) </br>
+8 [Opcionales](#opcionales)
+
 ## Get /product/
 
 ![get_product](captures/get_product.png)
@@ -37,3 +50,7 @@ comprovación:
 
 comprovación:
 ![post_loadProducts_check](captures/post_loadProducts_check.png)
+
+## Opcionales
+
+![opcional](captures/opcional.png)
